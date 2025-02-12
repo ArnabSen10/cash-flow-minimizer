@@ -4,52 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cash Flow Calculator</title>
-    <script>
-        async function calculate() {
-            const n = document.getElementById('numPeople').value;
-            const names = document.getElementById('names').value.split(',');
-            const currency = document.getElementById('currency').value;
-            const graph = document.getElementById('graph').value.split('\n').map(row => row.split(',').map(Number));
-
-            console.log("Sending request to /calculate with data:", { n, names, currency, graph });
-            const response = await fetch('/calculate', {
-
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ n: parseInt(n), names, currency, graph }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || "Error occurred while calculating.");
-            }
-            const result = await response.json();
-
-            document.getElementById('result').innerText = JSON.stringify(result, null, 2);
-            console.log("Calculation result:", result);
-
-        }
-    </script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Cash Flow Calculator</h1>
-    <label for="numPeople">Number of People:</label>
-    <input type="number" id="numPeople" required><br>
+    <form id="cashFlowForm">
+        <label for="n">Number of People:</label>
+        <input type="number" id="n" name="n" required min="2">
 
-    <label for="names">Names (comma-separated):</label>
-    <input type="text" id="names" required><br>
+        <label for="names">Names (comma-separated):</label>
+        <input type="text" id="names" name="names" required>
 
-    <label for="currency">Currency:</label>
-    <input type="text" id="currency" required><br>
+        <label for="currency">Currency:</label>
+        <input type="text" id="currency" name="currency" required>
 
-    <label for="graph">Cash Flow Matrix (comma-separated rows):</label>
-    <textarea id="graph" rows="5" required></textarea><br>
+        <label for="graph">Cash Flow Matrix (comma-separated rows):</label>
+        <textarea id="graph" name="graph" rows="5" required></textarea>
 
-    <button onclick="calculate()">Calculate</button>
-
-    <h2>Result:</h2>
-    <pre id="result"></pre>
+        <button type="submit">Calculate</button>
+    </form>
+    <div id="result"></div>
+    <script src="script.js"></script>
 </body>
 </html>

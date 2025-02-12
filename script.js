@@ -17,12 +17,20 @@ document.getElementById('cashFlowForm').addEventListener('submit', function(even
     .then(response => response.json())
     .then(data => {
         const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = '<h2>Transaction History:</h2>';
-        data.forEach(transaction => {
-            resultDiv.innerHTML += `<p>${transaction}</p>`;
-        });
+        resultDiv.innerHTML = '<h2>Transactions:</h2>';
+        if (Array.isArray(data)) {
+            data.forEach(transaction => {
+                resultDiv.innerHTML += `<p>${transaction}</p>`;
+            });
+        } else if (data.error) {
+            resultDiv.innerHTML += `<p>Error: ${data.error}</p>`;
+        } else {
+            resultDiv.innerHTML += `<p>Error: Unknown error occurred</p>`;
+        }
     })
     .catch(error => {
         console.error('Error:', error);
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
     });
 });
